@@ -46,7 +46,8 @@ class ClassSectionController extends Controller
     {
         $class_section = ClassSection::find($id);
         $class_section->update($request->all());
-        return $class_section;
+
+        return ClassSection::all();
     }
 
     /**

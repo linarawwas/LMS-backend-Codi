@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
@@ -36,6 +38,7 @@ class UserController extends Controller
         }
 
         if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
+            
             return response(['user' => $user]);
         } else {
             return response(['message' => 'You are not authorized to perform this action.'], 403);
@@ -104,17 +107,73 @@ class UserController extends Controller
 
 
     //DONE WITH TESTING UPDATE
-    public function update(Request $request, string $id)
-    {
-        $user = User::find($id);
+    // public function update(Request $request, string $id)
+    // {
+    //     $user = User::find($id);
 
-        if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
-            $user->update($request->all());
-            return $user;
-        } else {
-            return response(['message' => 'You are not authorized to perform this action.'], 403);
+    //     if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
+    //         $user->update($request->all());
+
+    //         log::info($request);
+
+    //         // log::info($request->hasFile('image'));
+    //         if ($request->hasFile('image')) {
+    //             $image = $request->file('image');
+    //             $imageName = time() . '.' . $image->extension();
+    //             $image->move(public_path('images'), $imageName);
+    //             $user->image = $imageName;
+
+    //             log::info("here");
+    //             log::info($user);
+    //         }
+    //         $user->save();
+    //         return User::all();
+    //         // return $user;
+    //     } else {
+    //         return response(['message' => 'You are not authorized to perform this action.'], 403);
+    //     }
+    // }
+
+    public function update(Request $request, string $id)
+{
+    $user = User::find($id);
+
+    if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
+        $user->update($request->all());
+
+        log::info($request);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $user->image = $imageName;
+
+            log::info("here");
+            log::info($user);
         }
+        $user->save();
+        return User::all();
+    } else {
+        return response(['message' => 'You are not authorized to perform this action.'], 403);
     }
+}
+
+
+
+
+
+
+
+   
+    
+
+
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

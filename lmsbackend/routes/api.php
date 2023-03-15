@@ -26,7 +26,6 @@ use App\Http\Controllers\AttendanceController;
 Route::post('/login', [AuthController::class, 'login']);
 
 
-
 //Private Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
