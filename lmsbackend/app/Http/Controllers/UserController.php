@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ClassSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -16,9 +17,10 @@ class UserController extends Controller
     //DONE  WITH TESTING GETTING ALL USERS
     public function index(User $user)
     {
+
         if (auth()->user()->role == 1) {
             // Users with role 1 can retrieve a list of all users
-            return User::all();
+            return User::with('classSection')->get();
         } elseif (auth()->user()->role == 2) {
             // Users with role 2 can only retrieve users with role 3
             return User::where('role', 3)->get();
@@ -38,7 +40,7 @@ class UserController extends Controller
         }
 
         if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
-            
+
             return response(['user' => $user]);
         } else {
             return response(['message' => 'You are not authorized to perform this action.'], 403);
@@ -70,6 +72,7 @@ class UserController extends Controller
     //DONE WITH TESTING CREATE
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'username' => 'required|unique:users|max:255',
             'password' => 'required|min:6',
@@ -84,11 +87,22 @@ class UserController extends Controller
         if (auth()->user()->role == 1) {
             // Users with role 1 can create users with any role
             $user = new User();
+
             $user->fill($validatedData);
+            $user->save();
+            log::info($user);
+
+            $user->classSection()->attach($request->class_section_id);
+            $user->save();
+
         } elseif (auth()->user()->role == 2 && $validatedData['role'] == 3) {
-            // Users with role 2 can only create users with role 3
+            //  Users with role 2 can only create users with role 3
             $user = new User();
             $user->fill($validatedData);
+            $user->save();
+            log::info($user);
+            $user->classSection()->attach($request->class_section_id);
+            $user->save();
         } else {
             // Users with role 3 or unauthorized users cannot create users
             return response(['message' => 'You are not authorized to perform this action.'], 403);
@@ -108,32 +122,33 @@ class UserController extends Controller
 
 
     public function update(Request $request, string $id)
-{
-  
-    log::info($request);
-    log::info($request->file('image'));
-    $user = User::find($id);
+    {
 
-    if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
-        $user->update($request->all());
-
+        log::info($request);
         log::info($request->file('image'));
+        $user = User::find($id);
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $user->image = $imageName;
+        if (auth()->user()->role == 1 || (auth()->user()->role == 2 && $user->role == 3)) {
+            $user->update($request->all());
+            $user->classSection()->attach($request->class_section_id);
+            $user->save();
+            log::info($request->file('image'));
 
-            log::info("here");
-            log::info($user);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $imageName);
+                $user->image = $imageName;
+
+                log::info("here");
+                log::info($user);
+            }
+            $user->save();
+            return User::all();
+        } else {
+            return response(['message' => 'You are not authorized to perform this action.'], 403);
         }
-        $user->save();
-        return User::all();
-    } else {
-        return response(['message' => 'You are not authorized to perform this action.'], 403);
     }
-}
 
 
 
@@ -141,8 +156,8 @@ class UserController extends Controller
 
 
 
-   
-    
+
+
 
 
 
