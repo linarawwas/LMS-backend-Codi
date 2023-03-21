@@ -23,7 +23,7 @@ class UserController extends Controller
             return User::with('classSection')->get();
         } elseif (auth()->user()->role == 2) {
             // Users with role 2 can only retrieve users with role 3
-            return User::where('role', 3)->get();
+            return User::where('role', 3)->with('classSection')->get();
         } else {
             // Users with role 3 or unauthorized users cannot retrieve users
             return response(['message' => 'You are not authorized to perform this action.'], 403);
