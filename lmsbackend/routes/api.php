@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassSectionController;
+use App\Http\Controllers\JoinController;
 use App\Http\Controllers\SectionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,11 +27,19 @@ use App\Http\Controllers\AttendanceController;
 Route::post('/login', [AuthController::class, 'login']);
 
 
+
+
+
+
 //Private Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 
+    Route::get('/join', [JoinController::class, 'getAllData']);
+    Route::post('/join', [JoinController::class, 'add']);
+    Route::put('/join/{id}', [JoinController::class, 'edit']);
+    Route::delete('/join/{id}', [\oinController::class, 'destroy']);
     // Define routes for the Logout,Register
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/register', [AuthController::class, 'register']);
@@ -40,8 +49,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::get('/users/search/{username}', [UserController::class, 'search']);
+    Route::post('/users/{id}', [UserController::class, 'update']);
     Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     // Define routes for the AttendanceController

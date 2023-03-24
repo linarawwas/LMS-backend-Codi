@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -70,21 +69,15 @@ class AuthController extends Controller
 
         // Check Password
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-
             return response([
                 'message' => 'Bad creds'
             ], 401);
         }
-
         $token = $user->createToken('myapptoken')->plainTextToken;
-
-
         $response = [
-
             'user' => $user,
             'role' => $user->role,
             'token' => $token,
-
         ];
         return response($response, 201);
 
