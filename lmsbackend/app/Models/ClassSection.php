@@ -32,7 +32,7 @@ class ClassSection extends Model
 
     public function UserClassSection()
     {
-        return $this->hasMany(User::class, 'user_class_sections');
+        return $this->belongsToMany(User::class, 'user_class_sections',"class_section_id","user_id");
     }
 
 

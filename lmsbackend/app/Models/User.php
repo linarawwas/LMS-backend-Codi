@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     public function classSection()
     {
-        return $this->hasMany(ClassesSection::class, 'user_class_sections');
+        return $this->belongsToMany(ClassSection::class, 'user_class_sections','user_id','class_section_id');
     }
 
 
