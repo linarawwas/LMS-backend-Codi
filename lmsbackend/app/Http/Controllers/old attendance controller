@@ -1,24 +1,20 @@
-<?php
 
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use App\Models\ClassSection;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+
 
 class AttendanceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Retrieve the attendance records for a class section
-        $classSection = ClassSection::find($request->class_section_id);
-        $attendanceRecords = $classSection->attendance;
-
-        return $attendanceRecords;
+        return Attendance::all();
     }
 
     /**
@@ -27,23 +23,16 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $request ->validate([
+
             'student_id'=> 'required',
             'teacher_id' => 'required',
             'class_section_id' => 'required',
             'status'=>'required|in:1,2,3',
-        ]);
-
-        $classSection = ClassSection::findOrFail($request->class_section_id);
-        
-        $attendance = new Attendance();
-        $attendance->student_id = $request->student_id;
-        $attendance->teacher_id = $request->teacher_id;
-        $attendance->status = $request->status;
-        $attendance->date = Carbon::now();
-
-        $classSection->attendance()->save($attendance);
-
-        return $attendance;
+        ])
+        ;
+        $data = $request->all();
+        $data['date'] = Carbon::now();
+        return Attendance::create($data);
     }
 
     /**
@@ -51,11 +40,7 @@ class AttendanceController extends Controller
      */
     public function show(string $id)
     {
-        // Retrieve the class section for an attendance record
-        $attendanceRecord = Attendance::find($id);
-        $classSection = $attendanceRecord->classSection;
-
-        return $classSection;
+        return Attendance::find($id);
     }
 
     /**

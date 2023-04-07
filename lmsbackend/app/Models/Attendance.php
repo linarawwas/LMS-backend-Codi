@@ -31,14 +31,18 @@ class Attendance extends Model
         return $this->belongsTo(User::class, 'student_id');
     }
 
-    public function teacher()
-    {
-        return $this->belongsTo(User::class, 'teacher_id');
-    }
+    // public function teacher()
+    // {
+    //     return $this->belongsTo(User::class, 'teacher_id');
+    // } 
+    // update by lina: [we do no have a teacher attendance]
 
     public function classSection()
     {
-        return $this->hasMany(ClassSection::class);
-    }
+        // return $this->hasMany(ClassSection::class);
+    // update by lina: [single attandence records can only belong to one classsection]
+    return $this->belongsTo(ClassSection::class);
+
+}
 
 }

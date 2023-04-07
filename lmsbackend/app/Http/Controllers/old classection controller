@@ -1,4 +1,3 @@
-<?php
 
 namespace App\Http\Controllers;
 
@@ -13,7 +12,7 @@ class ClassSectionController extends Controller
      */
     public function index()
     {
-        return ClassSection::with('Attendance')->get();
+        return ClassSection::all();
     }
 
     /**
@@ -21,12 +20,14 @@ class ClassSectionController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $request->validate([
             'class_id' => 'required',
             'section_id' => 'required',
         ]);
-
         return ClassSection::create($request->all());
+
     }
 
     /**
@@ -34,7 +35,7 @@ class ClassSectionController extends Controller
      */
     public function show(string $id)
     {
-        return ClassSection::with('Attendance')->find($id);
+        return ClassSection::find($id);
     }
 
     /**
@@ -51,8 +52,10 @@ class ClassSectionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(string $id)
     {
         return ClassSection::destroy($id);
     }
+
 }
