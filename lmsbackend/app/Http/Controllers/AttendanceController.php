@@ -43,7 +43,7 @@ class AttendanceController extends Controller
 
         $classSection->attendance()->save($attendance);
 
-        return $attendance;
+        $attendance->date = Carbon::now();
     }
 
     /**

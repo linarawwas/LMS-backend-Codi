@@ -12,9 +12,13 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        return Classes::all();
+        // return Classes::first(); this only gets me the first record
+        // i should use this: 
+           return Classes::get();
+       }
+       
 
-    }
+    
 
     /**
      * Display the specified resource.
