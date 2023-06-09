@@ -45,12 +45,12 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'url' => env('MYSQL_URL'),
+            'host' => env('MYSQLHOST', 'containers-us-west-34.railway.app'),
+            'port' => env('MYSQLPORT', '5726'),
+            'database' => env('MYSQLDATABASE', 'forge'),
+            'username' => env('MYSQLUSER', 'forge'),
+            'password' => env('MYSQLPASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
