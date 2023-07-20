@@ -38,9 +38,6 @@ class ClassSection extends Model
 
     public function Attendance()
     {
-        // return $this->belongsTo(Attendance::class);
-        // update from lina: it should be that: one attendance belongs to one class section, however, on classection has many attendance records
-        
         return $this->hasMany(Attendance::class);        
     
     }
